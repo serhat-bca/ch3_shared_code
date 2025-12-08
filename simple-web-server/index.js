@@ -28,6 +28,12 @@ app.get("/api/movies", (req, res) => {
   res.json(movies);
 });
 
+app.delete("/api/movies/:id", (req, res) => {
+  const id = req.params.id;
+  console.log("Passed Id: ", id);
+  res.json({ id: id });
+});
+
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
