@@ -1,6 +1,17 @@
 const express = require("express");
 const app = express();
 
+// middleware
+app.use(express.json());
+// if there is json body passed with the request
+// it creates a body object and attach it to request object
+
+// implement logger middleware
+const reqLogger = (req, res, next) => {
+  console.log(`Request Method: ${req.method}`);
+  console.log(`object`);
+};
+
 const port = 3001;
 
 let movies = [
@@ -52,9 +63,36 @@ app.delete("/api/movies/:id", (req, res) => {
 });
 
 app.post("/api/movies", (req, res) => {
-  const bodyObject = req.body;
-  console.log("here is the body: ", bodyObject);
-  res.json(bodyObject);
+  const { title, watchlist } = req.body;
+  if (!title) {
+    return res.status(400).json({ error: "Title is required" });
+  }
+  const movie = {
+    id: Date.now(),
+    title,
+    watchlist: watchlist || false,
+  };
+
+  movies.push(movie);
+  res.status(201).json(movie);
+  // const bodyObject = req.body;
+
+  // const id = Date.now();
+  // const title = bodyObject.title;
+  // const watchlist = bodyObject.watchlist;
+
+  // if(title) {
+  //   const newMovie = {
+  //     title: title,
+  //     watchlist: watchlist || false,
+  //     id: id
+  //   }
+
+  //   movies.push(newMovie);
+  //   res.json(newMovie);
+  // } else {
+  //   res.status(400).json({message:"Title is required"})
+  // }
 });
 
 app.listen(port, () => {
