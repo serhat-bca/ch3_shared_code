@@ -2,15 +2,19 @@ const express = require("express");
 const app = express();
 
 // middleware
-app.use(express.json());
 // if there is json body passed with the request
 // it creates a body object and attach it to request object
-
+app.use(express.json());
 // implement logger middleware
 const reqLogger = (req, res, next) => {
   console.log(`Request Method: ${req.method}`);
-  console.log(`object`);
+  console.log(`Request URL: ${req.path}`);
+  console.log("Request Body:", req.body);
+  console.log("----------------------------");
+  // dont forget to call next method like mr.sen
+  next();
 };
+app.use(reqLogger);
 
 const port = 3001;
 
